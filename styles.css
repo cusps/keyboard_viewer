@@ -1,0 +1,64 @@
+/* body {
+    background-color: #121212;
+} */
+
+.keyboard_body {
+    align-self: center;
+    width: 500px;
+    height: 300px;
+    /* border: 2px solid #555; */
+}
+
+.keyboard_row {
+    /* display: flex; */
+    width: 100%;
+    display: inline-block;
+    /* border: 2px solid #555; */
+    text-align: center;
+}
+
+.key {
+    /* scale: 0.1;   */
+    padding: 0%;
+    /* border: 5px solid #555; */
+    margin: 0;
+    width: 100px;
+
+    /* background-color: red; */
+    /* animation-name: example; */
+    /* animation-duration: 4s; */
+}
+
+/* .key:hover {
+    animation-name: example;
+    animation-duration: 4s;
+
+} */
+
+.key_container {
+    position: relative;
+    text-align: center;
+    width: fit-content;
+    height: fit-content;
+    display: inline-block;
+    /* border: 2px solid #555; */
+
+}
+
+.primary_key {
+    margin: 0;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* @keyframes example {
+    from {
+        background-color: red;
+    }
+
+    to {
+        background-color: yellow;
+    }
+} */
