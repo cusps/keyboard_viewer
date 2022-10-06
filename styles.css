@@ -50,19 +50,28 @@
 .primary_key {
     margin: 0;
     position: absolute;
-    top: 45%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: medium;
 }
 
+.primary_only_key {
+    margin: 0;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: large;
+}
+
 .secondary_key {
     margin: 0;
     position: absolute;
-    top: 20%;
+    top: 23%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: small;
+    font-size: medium;
 }
 
 /* @keyframes example {

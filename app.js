@@ -17,22 +17,27 @@ CUSTOM_SECONDARIES = {
 class Key {
     constructor(_primary, _secondary = null) {
         this.primary = _primary;
+        this.secondary = _secondary;
+        this.pri_class = "primary_key";
         if (_secondary == null)
         {
-            // Use custom if there TODO
+            // Use custom if there
             if(this.primary in CUSTOM_SECONDARIES)
             {
                 this.secondary = CUSTOM_SECONDARIES[this.primary];
             }
-            else
+            // Use default if there
+            else if (this.primary in DEFAULT_SECONDARIES)
             {
                 this.secondary = DEFAULT_SECONDARIES[this.primary];
             }
+            // Otherwise, the key has no secondary.
+            else
+            {
+                this.pri_class = "primary_only_key";
+            }
         }
-        else
-        {
-            this.secondary = _secondary;
-        }
+
     }
 }
 
@@ -69,7 +74,7 @@ let layers = [[
     //---------------------------------------------------------------------------------------       ----------------------------------------------------------------------------------
     new Key("CAPS"), new Key("Q"), new Key("W"), new Key("E"), new Key("R"), new Key("G"), new Key("NO"), new Key("NO"), new Key("NO"), new Key("ENTER"),
     //---------------------------------------------------------------------------------------       ----------------------------------------------------------------------------------
-    new Key("LSFT"), new Key("A"), new Key("S"), new Key("D"), new Key("F"), new Key("B"), new Key("M"), new Key("MS_ACC1"), new Key("MS_ACC2"), new Key("NO"),
+    new Key("LSFT"), new Key("A"), new Key("S"), new Key("D"), new Key("F"), new Key("B"), new Key("M"), new Key("MS ACC1"), new Key("MS ACC2"), new Key("NO"),
     //---------------------------------------------------------------------------------------       ----------------------------------------------------------------------------------
     new Key("C"), new Key("SPACE"), new Key("RALT"), new Key("L0")
 ]
@@ -115,7 +120,7 @@ for (const key of layers[0]) {
     var pri_key = document.createElement("primary_key");
     pri_key.id = "primary_key";
     pri_key.textContent = key.primary;
-    pri_key.className = "primary_key"
+    pri_key.className = key.pri_class
 
     var sec_key = document.createElement("secondary_key");
     sec_key.id = "secondary_key";
@@ -147,6 +152,7 @@ layer_select.onchange = function () {
             var sec_key = key_cont.children[2]
             pri_key.textContent = layers[layer][key_idx].primary
             sec_key.textContent = layers[layer][key_idx].secondary
+            pri_key.className = layers[layer][key_idx].pri_class
             key_idx++;
         }
     }
