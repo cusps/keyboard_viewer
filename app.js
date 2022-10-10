@@ -84,7 +84,7 @@ class KeyRow
         this.split = split;
         this.cols = cols;
 
-        console.assert(this.cols % 2 != 0, "Keyboard viewer does not support odd-length split keyboard rows");
+        console.assert(this.cols % 2 == 0, "Keyboard viewer does not support odd-length split keyboard rows");
 
         let keyboard = document.getElementById("keyboard"); 
         
@@ -189,7 +189,7 @@ class Keyboard {
         this.update_layer();
 
         // Setup layer select callback.
-        this.layer_select.onchange = this.update_layer;
+        this.layer_select.onchange = this.update_layer.bind(this);
     }
 
     update_layer()
