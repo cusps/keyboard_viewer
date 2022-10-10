@@ -3,9 +3,10 @@
 } */
 
 .keyboard_body {
+    display: inline-block;
+    text-align: center;
     align-self: center;
-    width: 500px;
-    height: 300px;
+    width: auto;
     /* border: 2px solid #555; */
 }
 
@@ -19,7 +20,23 @@
     text-align: center;
 }
 
-.key {
+.keyboard_row_split_left {
+    width: 40%;
+    display: inline-block;
+    padding-right: 5%;
+    /* border: 2px solid #555; */
+    text-align: right;
+}
+
+.keyboard_row_split_right {
+    width: 40%;
+    padding-left: 5%;
+    display: inline-block;
+    /* border: 2px solid #555; */
+    text-align: left;
+}
+
+.key_img {
     /* scale: 0.1;   */
     padding: 0%;
     /* border: 5px solid #555; */

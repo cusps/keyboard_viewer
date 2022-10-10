@@ -1,7 +1,4 @@
-
-// var txt = document.createElement("txt");
-// txt.textContent = "HELLO WORLD"
-// document.children[0].appendChild(txt);
+// const yaml = require('js-yaml');
 
 DEFAULT_SECONDARIES = {
     "1":"!", "2": "@", "3": "#", "4": "$", "5": "%", "6": "^",
@@ -11,7 +8,7 @@ DEFAULT_SECONDARIES = {
 }
 
 CUSTOM_SECONDARIES = {
-    "!":"&", "@": "#", "$": "%", "(":" )"
+    "!":"&", "@": "#", "$": "%", "(":")"
 }
 
 class Key {
@@ -37,7 +34,6 @@ class Key {
                 this.pri_class = "primary_only_key";
             }
         }
-
     }
 }
 
@@ -80,83 +76,138 @@ let layers = [[
 ]
 ];
 
-var keyboard = document.createElement("keyboard")
-keyboard.className = ".keyboard_body"
-document.getElementById("keyboard_body").appendChild(keyboard)
+class KeyRow
+{
+    constructor(row, cols, split)
+    {
+        this.row = row;
+        this.split = split;
+        this.cols = cols;
 
-var layer_select = document.getElementById("layer_select");
-for (let i = 0; i < layers.length; i++) {
-    var opt = document.createElement("option");
-    opt.value = i;
-    opt.innerHTML = i;
-    layer_select.appendChild(opt)
-}
+        console.assert(this.cols % 2 != 0, "Keyboard viewer does not support odd-length split keyboard rows");
 
+        let keyboard = document.getElementById("keyboard"); 
+        
+        this.left = document.createElement("div");
+        this.left.id = "key_row_" + row + "_left";
+        this.left.className = "keyboard_row"
+        keyboard.appendChild(this.left);
 
-
-// for (const layer of layers) {
-var row_num = 0;
-var col_num = 0;
-var row_div = document.createElement("keyboard_row")
-row_div.className = "keyboard_row";
-keyboard.appendChild(row_div)
-for (const key of layers[0]) {
-    if (col_num >= cols[row_num]) {
-        row_num++;
-        col_num = 0;
-
-        row_div = document.createElement("keyboard_row")
-        row_div.className = "keyboard_row";
-        keyboard.appendChild(row_div)
-    }
-
-    var cont = document.createElement("img_container");
-    cont.className = "key_container";
-    var img = document.createElement("img");
-    img.src = "./img/keycap_blank.png";
-    img.id = "key";
-    img.className = "key";
-
-    var pri_key = document.createElement("primary_key");
-    pri_key.id = "primary_key";
-    pri_key.textContent = key.primary;
-    pri_key.className = key.pri_class
-
-    var sec_key = document.createElement("secondary_key");
-    sec_key.id = "secondary_key";
-    sec_key.textContent = key.secondary;
-    sec_key.className = "secondary_key"
-
-    row_div.appendChild(cont);
-    cont.appendChild(img);
-    cont.appendChild(pri_key);
-    cont.appendChild(sec_key);
-    col_num++;
-}
-
-console.log("adding listener")
-// layer_select.addEventListener('change', function () {
-layer_select.onchange = function () {
-    var key_idx = 0;
-    var layer = document.getElementById("layer_select").value;
-    console.log("on select change")
-
-    for (var i = 0; i < keyboard.children.length; i++) {
-        var row = keyboard.children[i];
-        console.log("row")
-        console.log(row.id)
-        for (var j = 0; j < row.children.length; j++) {
-            var key_cont = row.children[j];
-            console.log("keys")
-            var pri_key = key_cont.children[1]
-            var sec_key = key_cont.children[2]
-            pri_key.textContent = layers[layer][key_idx].primary
-            sec_key.textContent = layers[layer][key_idx].secondary
-            pri_key.className = layers[layer][key_idx].pri_class
-            key_idx++;
+        
+        this.right = null;
+        if(this.split)
+        {
+            this.left.className = "keyboard_row_split_left";
+            this.right = document.createElement("div");
+            this.right.id = "key_row_" + row + "_right";
+            this.right.className = "keyboard_row_split_right";
+            keyboard.appendChild(this.right);
         }
     }
-};
 
-console.log(document.children);
-console.log(document.children[0]);
+    appendChild(element)
+    {
+        // Append to left side if still in first half of row.
+        if(!this.split || (this.left.children.length < this.cols/2))
+        {
+            this.left.appendChild(element);
+        }
+        // Otherwise, the rest go on the right side.
+        else
+        {
+            this.right.appendChild(element);
+        }
+    }
+}
+
+class Keyboard {
+    constructor(layers, rows, cols, split)
+    {
+        this.layers = layers;
+        this.rows = rows;
+        this.cols = cols;
+        this.split = split;
+
+        console.assert(this.rows == this.cols.length, 'Rows and cols out of sync');
+
+        // Create keyboard body.
+        this.keyboard = document.createElement("div")
+        this.keyboard.id = "keyboard"
+        this.keyboard.className = "keyboard_body"
+        document.getElementById("keyboard_body").appendChild(this.keyboard)
+
+
+        // Setup layer select
+        this.layer_select = document.getElementById("layer_select");
+        for (let i = 0; i < this.layers.length; i++) {
+            var opt = document.createElement("option");
+            opt.value = i;
+            opt.innerHTML = i;
+            this.layer_select.appendChild(opt);
+        }
+
+        console.log("gonna make keyboard elems: " + rows + " [" + cols + "]");
+
+
+        // Create keyboard elements
+        var idx = 0;
+        for(var row = 0; row < rows; row++)
+        {
+            // Setup new row.
+            var key_row = new KeyRow(row, this.cols[row], true);
+
+            // Add key elements.
+            for(var col = 0; col < cols[row]; col++)
+            {
+                var cont = document.createElement("div");
+                cont.id = "key_container_" + idx;
+                cont.className = "key_container";
+                
+                var img = document.createElement("img");
+                img.id = "key_img_" + idx;
+                img.className = "key_img";
+                img.src = "./img/keycap_blank.png";
+                
+                var pri_key = document.createElement("div");
+                pri_key.id = "pri_key_" + idx;
+                console.log(pri_key.id);
+                
+                var sec_key = document.createElement("div");
+                sec_key.id = "sec_key_" + idx;
+                sec_key.className = "secondary_key";
+                
+                key_row.appendChild(cont);
+                cont.appendChild(img);
+                cont.appendChild(pri_key);
+                cont.appendChild(sec_key);
+                
+                idx++;
+            }
+        }
+
+        // Setup default layer.
+        this.update_layer();
+
+        // Setup layer select callback.
+        this.layer_select.onchange = this.update_layer;
+    }
+
+    update_layer()
+    {
+        var key_idx = 0;
+        var layer_num = this.layer_select.value;
+        var layer = this.layers[layer_num];
+    
+        for (var key_idx = 0; key_idx < layer.length; key_idx++) {
+            var pri_key = document.getElementById("pri_key_"+key_idx);
+            var sec_key = document.getElementById("sec_key_"+key_idx);
+
+            var key = layer[key_idx];
+            pri_key.textContent = key.primary
+            pri_key.className = key.pri_class
+            sec_key.textContent = key.secondary           
+        }
+    }
+}
+
+var keyboard = new Keyboard(layers, rows, cols, true);
