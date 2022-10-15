@@ -8,7 +8,7 @@ DEFAULT_SECONDARIES = {
 }
 
 CUSTOM_SECONDARIES = {
-    "!":"&", "@": "#", "$": "%", "(":")"
+    "!":"&", "@": "#", "$": "%", "(":")", "^": "*"
 }
 
 class Key {
@@ -48,11 +48,11 @@ let layers = [[
 /*                                 */new Key("Space"), new Key("Shift"), /**/ new Key("Ctrl"), new Key("L1")
 ],
 [
-    new Key("ESC"), new Key("HOME"), new Key("END"), new Key("INS"), new Key("PG UP"), new Key("!"), new Key("@"), new Key("$"), new Key("^"), new Key("BACK"),
+    new Key("ESC"), new Key("HOME"), new Key("END"), new Key("INS"), new Key("\\", "|"), new Key("!"), new Key("@"), new Key("$"), new Key("^"), new Key("BACK"),
     //----------------------------------------------------------------------------                  ----------------------------------------------------------------------------------
-    new Key("TAB"), new Key("ALT"), new Key("GUI"), new Key("DEL"), new Key("PG DN"), new Key("[", "{"), new Key("]", "}"), new Key("=", "+"), new Key("-", "_"), new Key("Enter"),
+    new Key("TAB"), new Key("ALT"), new Key("GUI"), new Key("DEL"), new Key("(", ")"), new Key("[", "{"), new Key("]", "}"), new Key("=", "+"), new Key("-", "_"), new Key("Enter"),
     //----------------------------------------------------------------------------                  ----------------------------------------------------------------------------------
-    new Key("F1"), new Key("F2"), new Key("F3"), new Key("F4"), new Key("F5"), new Key("F6"), new Key("F7"), new Key("F8"), new Key("F9"), new Key("\\", " | "),
+    new Key("F1"), new Key("F2"), new Key("F3"), new Key("F4"), new Key("F5"), new Key("F6"), new Key("F7"), new Key("F8"), new Key("F9"), new Key("F10"),
     //---------------------------------------------------------------------------------------       ----------------------------------------------------------------------------------
     new Key("L0"), new Key("SHIFT"), new Key("CTL"), new Key("L2")
 ],
